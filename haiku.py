@@ -1,15 +1,21 @@
 import sys
-from nltk.tokenize import word_tokenize, wordpunct_tokenize, sent_tokenize
+from nltk.tokenize import word_tokenize, wordpunct_tokenize, sent_tokenize, WhitespaceTokenizer
 import curses
 from curses.ascii import isdigit
 import nltk
 from nltk.corpus import cmudict
+import string
 
 d = cmudict.dict()  
 
 def num_syllables(word):
-    return [len(list(y for y in x if isdigit(y[-1]))) for x in d[word.lower()]][0]
-
+	# if word in string.punctuation:
+	# 	return 0
+	word = word.translate(None, string.punctuation)
+	try:
+		return [len(list(y for y in x if isdigit(y[-1]))) for x in d[word.lower()]][0]
+	except KeyError:
+		return 18
 
 
 def parse_input(input_text):
@@ -22,7 +28,8 @@ def haikuize(sentence):
 	first_line = ""
 	second_line = ""
 	third_line = ""
-	for word in word_tokenize(sentence):
+	for word in sentence.split():
+		# print word + str(num_syllables(word))
 		if current_syl_count < 5:
 			current_syl_count += num_syllables(word)
 			if current_syl_count > 5:
@@ -38,7 +45,7 @@ def haikuize(sentence):
 			if current_syl_count > 17:
 				return (False, None)
 			third_line += (word + " ")
-		else:
+		elif num_syllables(word) > 0:
 			 return (False, None)
 	return (True, [first_line, second_line, third_line])
 
@@ -54,4 +61,6 @@ if __name__ == "__main__":
   	if is_haiku:
   		for line in haiku:
   			print line
+  	# else:
+  	# 	print "False: "+sentence
 
