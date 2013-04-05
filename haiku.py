@@ -47,8 +47,10 @@ def haikuize(sentence):
 			third_line += (word + " ")
 		elif num_syllables(word) > 0:
 			 return (False, None)
-	return (True, [first_line, second_line, third_line])
-
+	if current_syl_count == 17:
+		return (True, [first_line, second_line, third_line])
+	else:
+		return (False,None)
 
 
 if __name__ == "__main__":
@@ -61,6 +63,7 @@ if __name__ == "__main__":
   	if is_haiku:
   		for line in haiku:
   			print line
+  		print 
   	# else:
   	# 	print "False: "+sentence
 
