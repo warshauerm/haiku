@@ -4,9 +4,12 @@ import curses
 from curses.ascii import isdigit
 import nltk
 from nltk.corpus import cmudict
- 
+
+d = cmudict.dict()  
+
 def num_syllables(word):
-    return [len(list(y for y in x if isdigit(y[-1]))) for x in d[word.lower()]]
+    return [len(list(y for y in x if isdigit(y[-1]))) for x in d[word.lower()]][0]
+
 
 
 def parse_input(input_text):
